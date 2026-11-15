@@ -1,0 +1,35 @@
+# 🛡️ 01 - SQL Injection (SQLi) & Secure Remediation
+
+## Overview
+In this lab module on **TryHackMe**, I practiced identifying, exploiting, and mitigating **SQL Injection** vulnerabilities in web applications.
+
+### Techniques Covered
+- **In-Band SQLi:** Error-based and UNION-based data extraction.
+- **Authentication Bypass:** Manipulating login queries using payloads like `' OR 1=1 --`.
+- **Database Enumeration:** Extracting table structures and sensitive records.
+
+---
+
+## 🔧 Remediation: How to Fix SQL Injection
+The primary defense against SQL Injection is separating user input from the database query structure using **Prepared Statements (Parameterized Queries)**.
+
+### Vulnerable vs. Secure PHP Example
+
+#### ❌ Vulnerable Code (Direct Concatenation)
+```php
+// User input is placed directly inside the query string
+\$username = \(_POST['username'];\)query = "SELECT * FROM users WHERE username = '\$username'";
+\$result = mysqli_query(conn, query);
+```
+
+#### ✅ Secure Code (Prepared Statements with PDO)
+```php
+// User input is bound safely as a parameter, preventing SQL execution
+stmt = pdo->prepare('SELECT id, username, password_hash FROM users WHERE username = :username');
+\(stmt->execute(['username' =>\)_POST['username']]);
+user = stmt->fetch();
+```
+
+### Defense-in-Depth
+- **Principle of Least Privilege:** Ensure the database account used by the web application only has the minimum required permissions (e.g., no `DROP TABLE` or file system access).
+- **Hide Database Errors:** Disable verbose SQL error messages in production environments to prevent attackers from mapping the database structure.
